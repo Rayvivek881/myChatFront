@@ -112,6 +112,13 @@ function Profile(props) {
     return null
   }
 
+  const isFriend = (id) => {
+    for (let index = 0; index < friends?.length; index++) {
+      if (JSON.parse(friends[index])[0] == id) return true;
+    }
+    return id == myid
+  }
+
   const gotoMessagebox = () => {
     changeisopenmessage({ 
       ...isopenmessage, 
@@ -124,12 +131,20 @@ function Profile(props) {
   }
 
   const handleClick = (event, val, index) => {
+    if (val.userid != myid) {
+      alert('you do not have permition to do this opration i am sorry')
+      return;
+    }
     setAnchorEl(event.currentTarget);
     changeposteditdata({...val, index: index})
   };
 
   const deletethisPost = () => {
     setAnchorEl(null);
+    if (allPosts[posteditdata.index].userid != myid) {
+      alert('you can not ');
+      return;
+    }
     let newposts = allPosts;
     newposts.splice(posteditdata.index, 1);
     let newUserData = userData;
@@ -180,7 +195,7 @@ function Profile(props) {
     setExpanded(!expanded);
   };
 
-  const sendToEditProfile = () => history.push('/editprofile');
+  const sendToEditProfile = () => history.push(`/editprofile/${mydata._id}`);
 
   const even = (flage, index) => {
     var newPost = allPosts;
@@ -199,6 +214,10 @@ function Profile(props) {
   }
 
   const sendFriendRequest = (e, id) => {
+    if (isFriend(id)) {
+      alert('he is already you frind');
+      return;
+    }
     axios.put(`/friendreq?friendid=${id}`, {});
     alert('request sent');
   }
@@ -239,7 +258,7 @@ function Profile(props) {
                   className={classes.editButton}
                   onClick={sendToEditProfile}
                   startIcon={<EditIcon />}>
-                  Edit profile
+                  Edit your profile
                 </Button>
                 <Typography style={{ marginTop: '10px' }} >All Friends</Typography>
                 <Grid item xs={12} className={classes.friendgrid}>
@@ -257,9 +276,10 @@ function Profile(props) {
                               <Button
                                 variant="contained"
                                 color="primary"
+                                disabled = {isFriend(JSON.parse(val)[0])}
                                 onClick={(e) => sendFriendRequest(e, JSON.parse(val)[0])}
                                 className={classes.editButton1}>
-                                Add Friend
+                                {(isFriend(JSON.parse(val)[0])) ? 'Add Friend': 'Unfriend'}
                             </Button>
                               <Button
                                 variant="contained"
