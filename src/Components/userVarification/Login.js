@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { withRouter, useHistory } from 'react-router-dom'
-import {Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Checkbox, Dialog} from '@material-ui/core';
-import { FormControlLabel, Typography, Container, makeStyles } from '@material-ui/core';
-import {DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { Avatar, Button, CssBaseline, TextField, Link, Grid, Box, Checkbox, Dialog } from '@material-ui/core';
+import { FormControlLabel, Typography, Container, makeStyles, Snackbar } from '@material-ui/core';
+import { DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import MuiAlert from '@material-ui/lab/Alert';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import axios from 'axios';
-import {GlobalContext} from '../Context/GlobalStroge'
+import { GlobalContext } from '../Context/GlobalStroge'
 
 function Copyright() {
   document.title = "Login page"
@@ -20,7 +21,9 @@ function Copyright() {
     </Typography>
   );
 }
-
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(5),
@@ -55,15 +58,15 @@ function SignIn(props) {
   const classes = useStyles();
   const [loginForm, SetloginForm] = useState(initialstate);
   let [frotp, cfrotp] = React.useState('');
-  const [openvar, setOpenvar] = React.useState(false); 
-  const [openvar1, setOpenvar1] = React.useState(false); 
-  const [openvar2, setOpenvar2] = React.useState(false); 
-  const [isemail, cisemail] = React.useState(false); 
+  const [openvar, setOpenvar] = React.useState(false);
+  const [openvar1, setOpenvar1] = React.useState(false);
+  const [openvar2, setOpenvar2] = React.useState(false);
+  const [isemail, cisemail] = React.useState(false);
   const [searchdata, changesearchdata] = React.useState('');
   const [usergivenotp, changeusergivenotp] = React.useState('');
   const [forgetForm, changeforgetForm] = React.useState(initialstate1);
   const history = useHistory();
-  const {ChangeuserData} = useContext(GlobalContext)
+  const { ChangeuserData } = useContext(GlobalContext)
 
   const handleClickOpen1 = () => {
     setOpenvar(true);
@@ -94,7 +97,7 @@ function SignIn(props) {
   }
   const sendOtpTovarify = async () => {
     console.log('sending.......');
-    const result = await axios.post('/forgetpass', {emailorusername: searchdata});
+    const result = await axios.post('/forgetpass', { emailorusername: searchdata });
     console.log('got sent.......');
     if (result.data.isVarified) {
       cfrotp(result.data.val);
@@ -128,8 +131,8 @@ function SignIn(props) {
           autoFocus
           margin="dense"
           id="name"
-          value = {searchdata}
-          onChange = {(e) => {changesearchdata(e.target.value);}}
+          value={searchdata}
+          onChange={(e) => { changesearchdata(e.target.value); }}
           label="Email Address or username"
           type="text"
           fullWidth
@@ -150,14 +153,14 @@ function SignIn(props) {
       <DialogTitle id="form-dialog-title">Forget password</DialogTitle>
       <DialogContent>
         <DialogContentText>
-        We have sent an Verification code in your submited email please enter 6 digits OTP code otherwise 
-            retry to resubmit form
+          We have sent an Verification code in your submited email please enter 6 digits OTP code otherwise
+          retry to resubmit form
           </DialogContentText>
         <TextField
           autoFocus
           margin="dense"
           id="name1"
-          onChange = {(e) => {changeusergivenotp(e.target.value);}}
+          onChange={(e) => { changeusergivenotp(e.target.value); }}
           label="Enter OTP"
           type="text"
           fullWidth
@@ -180,13 +183,15 @@ function SignIn(props) {
         <TextField
           margin="dense"
           id="name1"
-          variant = 'outlined'
-          onChange = {(e) => {changeforgetForm(
-            {
-              ...forgetForm,
-              [e.target.name]: e.target.value
-            }
-          );}}
+          variant='outlined'
+          onChange={(e) => {
+            changeforgetForm(
+              {
+                ...forgetForm,
+                [e.target.name]: e.target.value
+              }
+            );
+          }}
           name="password"
           label="password"
           type="text"
@@ -194,13 +199,15 @@ function SignIn(props) {
         />
         <TextField
           margin="dense"
-          variant = 'outlined'
-          onChange = {(e) => {changeforgetForm(
-            {
-              ...forgetForm,
-              [e.target.name]: e.target.value
-            }
-          );}}
+          variant='outlined'
+          onChange={(e) => {
+            changeforgetForm(
+              {
+                ...forgetForm,
+                [e.target.name]: e.target.value
+              }
+            );
+          }}
           name="cpassword"
           label="Confrom password"
           type="text"
@@ -221,18 +228,19 @@ function SignIn(props) {
   const handleChange = (e) => {
     SetloginForm({ ...loginForm, [e.target.name]: e.target.value });
   }
-
+  const [snack, changesnack] = React.useState({ a: false, m: '', e: false })
   const handleSubmit = async () => {
     const result = await axios.post('/login', loginForm);
     console.log(result.data);
     if (result.data.isVarified) {
-        console.log(result.data.data);
-        ChangeuserData(result.data.data);
-        history.push('/');
+      console.log(result.data.data);
+      ChangeuserData(result.data.data);
+      history.push('/');
     } else {
-      alert(result.data.massage);
+      changesnack({ a: true, m: result.data.massage, c: false });
     }
   }
+  console.log('signing..........');
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -253,7 +261,7 @@ function SignIn(props) {
             label="Username"
             name="username"
             autoComplete="username"
-            onChange = {handleChange}
+            onChange={handleChange}
             autoFocus
           />
           <TextField
@@ -264,7 +272,7 @@ function SignIn(props) {
             name="password"
             label="Password"
             type="password"
-            onChange = {handleChange}
+            onChange={handleChange}
             id="password"
             autoComplete="current-password"
           />
@@ -273,7 +281,7 @@ function SignIn(props) {
             label="Select this Checkbox To Allow Use cookie Data"
           />
           <Button
-            onClick = {handleSubmit}
+            onClick={handleSubmit}
             fullWidth
             variant="contained"
             color="primary"
@@ -282,7 +290,7 @@ function SignIn(props) {
             Sign In
           </Button>
           <Grid container>
-          <Grid item xs onClick = {handleClickOpen1}>
+            <Grid item xs onClick={handleClickOpen1}>
               <Link variant="body2">
                 Forgot password?
               </Link>
@@ -301,6 +309,13 @@ function SignIn(props) {
       <Box mt={8}>
         <Copyright />
       </Box>
+      <Snackbar
+        open={snack.a}
+        autoHideDuration={4000}
+        onClose={() => {changesnack({a: false, m: '', e: false })}}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}>
+        <Alert severity={(snack.e) ? 'success' : 'error'}> {snack.m} </Alert>
+      </Snackbar>
     </Container>
   );
 }

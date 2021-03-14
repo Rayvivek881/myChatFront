@@ -69,7 +69,7 @@ function Home() {
       <Grid item xs={6}> <div className={classes.paper}> <AllPosts /> </div> </Grid>
       <Grid item xs={3}>
         <div className={classes.paper}>
-          <Grid spacing = {3} >
+          <Grid spacing = {3}>
             <Grid xs = {12}>
               <div className= {classes.righttitle}> <Typography> {tag} </Typography> </div>
             </Grid>

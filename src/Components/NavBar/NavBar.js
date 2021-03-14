@@ -13,6 +13,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import {GlobalContext} from '../Context/GlobalStroge'
 import NewPost from '../Home/CreateNewPost';
 import axios from 'axios';
+import RightAlert from '../Waiting/RightAlert'
 
 const useStyles = makeStyles((theme) => ({
   mybutton: {
@@ -103,8 +104,9 @@ function NavBar(props) {
   const isSearchOpen = Boolean(openMenu);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const [createpost, Changecreatepost] = useState(false);
-  const [searchdata, Changesearchdata] = useState([]);
+  const [searchdata, Changesearchdata] = useState({matches: [], group: []});
   const {userData, ChangeuserData, ChangeTemp} = useContext(GlobalContext);
+  const [snack, changesnack] = useState({ a: false, m: '', e: false })
   const history = useHistory();
 
   const handleProfileMenuOpen = (event) => {
@@ -118,7 +120,7 @@ function NavBar(props) {
     if (event.keyCode == 13) {
       setopenMenu(event.currentTarget);
       const result = await axios.post('/search', { search: event.target.value });
-      Changesearchdata(result.data.matches);
+      Changesearchdata({matches: result.data.matches, group: result.data.group});
       console.log(searchdata);
     }
   };
@@ -126,8 +128,8 @@ function NavBar(props) {
   const sendtoProfile = () =>  history.push(`/profile/${userData?._id}`);
 
   const sendFriendRequest = (e, id ) => {
+    changesnack({a: true, m: 'your friend request has sent', e: true})
     axios.put(`/friendreq?friendid=${id}`, {});
-    alert('request sent');
   }
 
   const ChangeleftMenu = (e, val) => {
@@ -168,7 +170,7 @@ function NavBar(props) {
       <MenuItem >
         <p style={{ textAlign: 'center' }}> your Searches </p>
       </MenuItem>
-      {searchdata?.map((val) => (
+      {searchdata.matches?.map((val) => (
         <MenuItem key={val._id} style={{justifyContent: 'space-between'}}>
           <div style ={{display: 'flex'}}>
           <Avatar alt={val.fullname} src="#" />
@@ -182,6 +184,20 @@ function NavBar(props) {
             Add friend </Button>
         </MenuItem>
       ))}
+      {searchdata.group?.map((val) => (
+        <MenuItem key={val._id} style={{justifyContent: 'space-between'}}>
+          <div style ={{display: 'flex'}}>
+          <Avatar alt={val.groupName} src="#" />
+          <p style={{ marginLeft: '8px' }}> {val.groupName} </p>
+          </div>
+          <Button
+            variant='contained'
+            style={{ display: 'block' }}
+            color='primary' >
+            Add request </Button>
+        </MenuItem>
+      ))}
+
     </Menu>
   );
 

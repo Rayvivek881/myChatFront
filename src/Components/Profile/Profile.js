@@ -19,6 +19,7 @@ import moment from 'moment'
 import ProfileMSG from './ProfileMessage'
 import EditPosts from '../Profile/EditPosts'
 import SimpleBackdrop from '../Waiting/ProgressBar'
+import RightAlert from '../Waiting/RightAlert'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -99,6 +100,7 @@ function Profile(props) {
   const [isopen, changeisopen] = React.useState(false);
   const [isopenmessage, changeisopenmessage] = React.useState(initaialmassagedata);
   const [posteditdata, changeposteditdata] = React.useState({});
+  const [snack, changesnack] = React.useState({ a: false, m: '', e: false })
   const params = useParams(), history = useHistory();
   const profileid = params.id;
   const {friends, myid, myname, userData, allPosts, ChangePosts, ChangeBoth} = useContext(GlobalContext);
@@ -132,7 +134,7 @@ function Profile(props) {
 
   const handleClick = (event, val, index) => {
     if (val.userid != myid) {
-      alert('you do not have permition to do this opration i am sorry')
+      changesnack({ a: true, m: `you don't have permission to access this`, c: false });
       return;
     }
     setAnchorEl(event.currentTarget);
@@ -218,8 +220,8 @@ function Profile(props) {
       alert('he is already you frind');
       return;
     }
+    changesnack({a: true, m: 'your friend has been sent', e: true});
     axios.put(`/friendreq?friendid=${id}`, {});
-    alert('request sent');
   }
 
   const gotomyfriendprofile = (id) => {
@@ -394,6 +396,7 @@ function Profile(props) {
         posteditdata = {posteditdata}
         changeisopen={changeisopen} />
       <SimpleBackdrop progressbar = {progressbar} changeprogressbar = {changeprogressbar}/>
+      <RightAlert snack = {snack} changesnack = {changesnack}/>
     </div>
   );
 }
