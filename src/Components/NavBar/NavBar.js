@@ -132,6 +132,11 @@ function NavBar(props) {
     axios.put(`/friendreq?friendid=${id}`, {});
   }
 
+  const sendjoinrequest = (id) => {
+    changesnack({a: true, m: 'your group join request has sent', e: true});
+    axios.get(`/groupreq?groupid=${id}`, {});
+  }
+
   const ChangeleftMenu = (e, val) => {
     ChangeTemp(val);
     setAnchorEl(null);
@@ -193,8 +198,9 @@ function NavBar(props) {
           <Button
             variant='contained'
             style={{ display: 'block' }}
+            onClick = {() => sendjoinrequest(val._id)}
             color='primary' >
-            Add request </Button>
+            send request </Button>
         </MenuItem>
       ))}
 
@@ -378,6 +384,7 @@ function NavBar(props) {
       {renderMobileMenu}
       {renderMenu}
       <NewPost createpost={createpost} Changecreatepost={Changecreatepost} />
+    <RightAlert snack = {snack} changesnack = {changesnack} />  
     </div>
   );
 }

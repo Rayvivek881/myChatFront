@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import {TextField, Dialog, DialogActions, DialogContent, DialogContentText, MenuItem, FormControl, Select} from "@material-ui/core";
-import {Button, Avatar, ListItemAvatar, ListItemText, ListItem, List, Divider, Typography, Grid} from "@material-ui/core";
+import { TextField, Dialog, DialogActions, DialogContent, DialogContentText, MenuItem, FormControl, Select } from "@material-ui/core";
+import { Button, Avatar, ListItemAvatar, ListItemText, ListItem, List, Divider, Typography, Grid } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import img1 from '../images/default_profile.png'
 import EditIcon from "@material-ui/icons/Edit";
@@ -33,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
   image: {
     borderRadius: '40px',
-    maxheight: '50vh',
-    maxWidth: '45vh'
+    maxheight: '45vh',
+    maxWidth: '40vh'
   },
   paperpost: {
     marginTop: '15px',
@@ -103,49 +103,92 @@ const initaialmassagedata = {
 function Groupinfo(props) {
   const [age, setAge] = React.useState(0);
   const classes = useStyles();
-  const {myid, friends} = React.useContext(GlobalContext)
+  const { myid, friends, userData, ChangeuserData } = React.useContext(GlobalContext)
   const history = useHistory(), params = useParams();
   const id = params.id;
-  const handleChange = (event) =>  setAge(event.target.value);
-
+  const handleChange = (event) => setAge(event.target.value);
+  const [groupdata, changegroupdata] = React.useState({});
+  let groupedit = {
+    image: groupdata.image,
+    status: groupdata.status,
+    groupName: groupdata.groupName,
+    groupid: groupdata._id
+  }
+  const quitthisgroup = () => {
+    const newuserData = userData;
+    newuserData.groups.splice(newuserData.groups.indexOf(JSON.stringify([groupdata._id, groupdata.groupName,])), 1);
+    ChangeuserData(newuserData);
+    axios.get(`/quitgroup?groupid=${groupdata._id}&groupNmae=${groupdata.groupName}`, {})
+    history.push('/');
+  }
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const [groupdata, changegroupdata] = React.useState({});
   const addthis = (arr) => {
     if (myid == JSON.parse(groupdata.Admin)[1]) {
       const obj = {
         friendid: arr[0],
         name: arr[1],
-        groupid : groupdata._id,
-        groupName : groupdata.groupName
+        groupid: groupdata._id,
+        groupName: groupdata.groupName
       }
       console.log(obj);
       axios.put('/addmember', obj);
     } else {
       axios.get(`/addgroupreq?friendid=${arr[0]}&name=${arr[1]}&groupid=${groupdata._id}&groupName=${groupdata.groupName}`)
-      alert('request sent');  
+      alert('request sent');
     }
   }
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
+
+  const ConverBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  }
+  const changeImage = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await ConverBase64(file);
+    groupedit = { ...groupedit, image: base64 };
+  }
+  const editmyprofile = () => {
+    changegroupdata({ ...groupdata, image: groupedit.image, status: groupedit.status, groupName: groupedit.groupName,});
+    console.log(groupdata);
+    axios.post('/editgroup', groupedit);
+    handleClose();
+  }
+  console.log(groupdata);
+  const removethisfromFroup = (val, index) => {
+    axios.get(`/rmmember?groupid=${groupdata._id}&member=${val}`, {});
+    console.log(index);
+    var newgroupdata = groupdata;
+    newgroupdata.members?.splice(index, 1);
+    changegroupdata({ ...newgroupdata });
+  }
+  console.log('updateing........');
   useEffect(async () => {
     if (id != '') {
-        console.log('taking1......');
-        const result = await axios.get(`/groupquery/${id}`, {});
-        console.log('taking2......');
-        console.log(result.data.result);
-        changegroupdata({...result.data.result});
+      console.log('taking1......');
+      const result = await axios.get(`/groupquery/${id}`, {});
+      console.log('taking2......');
+      console.log(result.data.result);
+      changegroupdata({ ...result.data.result });
     }
   }, [id]);
 
   const allmember = (
     <List className={classes.root}>
       {groupdata.members?.map((val, index) => (
-        <div key = {JSON.parse(val)[0]}>
+        <div key={JSON.parse(val)[0]}>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
               <Avatar alt="Remy Sharp" src="#" />
@@ -156,12 +199,14 @@ function Groupinfo(props) {
                 <React.Fragment>
                   <Button
                     variant="contained"
+                    onClick={() => removethisfromFroup(val, index)}
                     color="secondary">
                     Remove
                     </Button>
                   <Button
                     variant="contained"
                     style={{ marginLeft: '10px' }}
+                    onClick={() => history.push(`/profile/${JSON.parse(val)[0]}`)}
                     color="primary">
                     profile
                     </Button>
@@ -173,10 +218,28 @@ function Groupinfo(props) {
         </div>))}
     </List>
   );
+  const addmember = (val, index) => {
+    if (myid != JSON.parse(groupdata.Admin)[1]) {
+      alert('you can not');
+      return;
+    }
+    let newgroupdata = groupdata;
+    newgroupdata.members?.push(val);
+    newgroupdata.requests?.splice(index, 1);
+    changegroupdata({ ...newgroupdata });
+    let obj = {
+      groupid: groupdata._id,
+      friendid: JSON.parse(val)[0],
+      name: JSON.parse(val)[1],
+      groupName: groupdata.groupName
+    }
+    axios.put('/addmember', obj);
+  }
+
   const requests = (
     <List className={classes.root}>
       {groupdata.requests?.map((val, index) => (
-        <div key = {JSON.parse(val)[0]}>
+        <div key={JSON.parse(val)[0]}>
           <ListItem alignItems="flex-start">
             <ListItemAvatar>
               <Avatar alt="Remy Sharp" src="#" />
@@ -187,12 +250,14 @@ function Groupinfo(props) {
                 <React.Fragment>
                   <Button
                     variant="contained"
+                    onClick={() => addmember(val, index)}
                     color="primary">
                     Add
                   </Button>
                   <Button
                     variant="contained"
                     style={{ marginLeft: '10px' }}
+                    onClick={() => history.push(`/profile/${JSON.parse(val)[0]}`)}
                     color="primary">
                     profile
                     </Button>
@@ -222,7 +287,7 @@ function Groupinfo(props) {
                 justify="flex-start"
                 alignItems="flex-start"
                 sm={5}>
-                <img src={(groupdata.image == null) ? img1: groupdata.image} alt='vivek kumaar ray' className={classes.image} />
+                <img src={(groupdata.image == null) ? img1 : groupdata.image} alt='vivek kumaar ray' className={classes.image} />
                 <Typography style={{ marginTop: '10px' }} >All your Friends</Typography>
                 <Grid item xs={12} className={classes.friendgrid}>
                   <List className={classes.root2}>
@@ -241,7 +306,7 @@ function Groupinfo(props) {
                                 color="primary"
                                 size='small'
                                 startIcon={<AddIcon />}
-                                onClick = {() => addthis(JSON.parse(val))}
+                                onClick={() => addthis(JSON.parse(val))}
                                 className={classes.editButton1}>
                                 add
                             </Button>
@@ -278,6 +343,7 @@ function Groupinfo(props) {
                   color="secondary"
                   style={{ marginTop: '10px' }}
                   fullWidth
+                  onClick = {() => quitthisgroup()}
                   endIcon={<ExitToAppIcon />}>
                   quit group
                 </Button>
@@ -304,14 +370,19 @@ function Groupinfo(props) {
       <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
+        aria-labelledby="form-dialog-title">
         <DialogContent>
           <DialogContentText>change group name and status</DialogContentText>
           <TextField
             id="name"
             label="group Name"
             margin="dense"
+            onChange={(e) => {
+              groupedit = {
+                ...groupedit,
+                groupName: e.target.value
+              }
+            }}
             variant="outlined"
             type="text"
             fullWidth
@@ -320,6 +391,12 @@ function Groupinfo(props) {
             margin="dense"
             variant="outlined"
             id="name"
+            onChange={(e) => {
+              groupedit = {
+                ...groupedit,
+                status: e.target.value
+              }
+            }}
             label="group status"
             type="text"
             fullWidth
@@ -329,6 +406,7 @@ function Groupinfo(props) {
               accept="image/*"
               className={classes.input}
               id="contained-button-file"
+              onChange={changeImage}
               multiple
               type="file"
             />
@@ -348,7 +426,7 @@ function Groupinfo(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={editmyprofile} color="primary">
             save
           </Button>
         </DialogActions>
