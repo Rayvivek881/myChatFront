@@ -8,6 +8,7 @@ import Leftmenu from './HomeLeftMenu'
 import MyGroups from './Mygroups'
 import SimpleBackdrop from '../Waiting/ProgressBar'
 import { GlobalContext } from '../Context/GlobalStroge'
+import Notefications from './homeNotefication'
 
 const UseStyles = makeStyles((theme) => ({
   root: {
@@ -50,7 +51,7 @@ function Home() {
     renderleft = ( <Friendlst /> )
     tag = 'Friends';
   } else if (Temp == 2) {
-    renderleft =  'there is no Notefications';
+    renderleft =  <Notefications />;
     tag = 'Notefications';
   }
   if (!myid) {

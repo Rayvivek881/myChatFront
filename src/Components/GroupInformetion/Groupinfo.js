@@ -116,7 +116,7 @@ function Groupinfo(props) {
   }
   const quitthisgroup = () => {
     const newuserData = userData;
-    newuserData.groups.splice(newuserData.groups.indexOf(JSON.stringify([groupdata._id, groupdata.groupName,])), 1);
+    newuserData.groups.splice(newuserData.groups.indexOf(JSON.stringify([groupdata._id, groupdata.groupName])), 1);
     ChangeuserData(newuserData);
     axios.get(`/quitgroup?groupid=${groupdata._id}&groupNmae=${groupdata.groupName}`, {})
     history.push('/');
@@ -136,7 +136,7 @@ function Groupinfo(props) {
       console.log(obj);
       axios.put('/addmember', obj);
     } else {
-      axios.get(`/addgroupreq?friendid=${arr[0]}&name=${arr[1]}&groupid=${groupdata._id}&groupName=${groupdata.groupName}`)
+      axios.get(`/addgroupreq?friendid=${arr[0]}&name=${arr[1]}&groupid=${groupdata._id}&groupName=${groupdata.groupName}&Adminid=${groupdata.Admin}`)
       alert('request sent');
     }
   }
@@ -273,7 +273,7 @@ function Groupinfo(props) {
   useEffect(() => {
     if (age == 1) setremove({ val: requests });
     else setremove({ val: allmember });
-  }, [age])
+  }, [age]);
   return (
     <div className={classes.root}>
       <Grid container spacing={0}>

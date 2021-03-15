@@ -339,12 +339,12 @@ function NavBar(props) {
               color="secondary"
             />
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={userData?.newmessage != undefined ? userData?.newmessage : 0} color="secondary" onClick={(e) => ChangeleftMenu(e, 1)}>
+              <Badge badgeContent={userData.newmessage} color="secondary" onClick={(e) => ChangeleftMenu(e, 1)}>
                 <MessageIcon />
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" onClick={(e) => ChangeleftMenu(e, 2)} color="inherit">
-              <Badge badgeContent={15} color="secondary">
+              <Badge badgeContent={userData.newnotifications} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -384,7 +384,7 @@ function NavBar(props) {
       {renderMobileMenu}
       {renderMenu}
       <NewPost createpost={createpost} Changecreatepost={Changecreatepost} />
-    <RightAlert snack = {snack} changesnack = {changesnack} />  
+    <RightAlert snack = {snack} changesnack = {changesnack} />
     </div>
   );
 }

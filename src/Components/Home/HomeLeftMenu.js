@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,6 +12,8 @@ import AllInboxIcon from '@material-ui/icons/AllInbox';
 import ChatIcon from '@material-ui/icons/Chat';
 import CloudIcon from '@material-ui/icons/Cloud';
 import CreateGroup from '../Home/CreateNewGroup'
+import {GlobalContext} from '../Context/GlobalStroge'
+import { withRouter, useHistory } from 'react-router-dom'
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -25,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Leftmenu(props) {
   const classes = useStyles();
+  const history = useHistory();
   const [newGroup, changenewGroup] = React.useState(false)
+  const {ChangeTemp, myid} = useContext(GlobalContext)
   const newGroup1 = () => {
     changenewGroup(true);
     console.log('creating.......');
@@ -38,13 +42,13 @@ export default function Leftmenu(props) {
       aria-labelledby="nested-list-subheader"
       className={classes.root}
     >
-      <ListItem button>
+      <ListItem button onClick = {() => history.push(`/profile/${myid}`)}>
         <ListItemIcon>
           <Avatar alt="Vivek" src="#" />
         </ListItemIcon>
         <ListItemText primary="Vivek kumar ray" />
       </ListItem>
-      <ListItem button>
+      <ListItem button onClick = {() => ChangeTemp(1)}>
         <ListItemIcon>
           <PeopleIcon fontSize = 'large' />
         </ListItemIcon>

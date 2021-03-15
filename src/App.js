@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.css';
 import {GlobalProvider} from './Components/Context/GlobalStroge';
-import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import SignIn from './Components/userVarification/Login'
 import SignUp from './Components/userVarification/SignUp'
 import NavBar from './Components/NavBar/NavBar'

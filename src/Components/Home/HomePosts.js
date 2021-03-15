@@ -63,10 +63,10 @@ export default function AllPosts() {
     }
   }
   console.log('homepost.........');
-  const likeThisPost = async (postid, flage, index)=> {
+  const likeThisPost = async (postid, flage, index, userid)=> {
     even(flage, index);
     if(!flage) {
-      await axios.put(`/like?postid=${postid}`, {});
+      await axios.put(`/like?postid=${postid}&userid=${userid}`, {});
     } else {
       await axios.put(`/rmlike?postid=${postid}`, {});
     }
@@ -102,7 +102,7 @@ export default function AllPosts() {
           </CardContent>
           <CardActions disableSpacing>
             <IconButton aria-label="add to favorites" onClick = {() => 
-              likeThisPost(val._id, (val.likes.indexOf(myid) != -1), index)}>
+              likeThisPost(val._id, (val.likes.indexOf(myid) != -1), index, val.userid)}>
               <FavoriteIcon color = {(val.likes.indexOf(myid) != -1) ? 'secondary': 'primary'}/>
             </IconButton>
             <IconButton aria-label="share">
