@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
           ...updateForm
         });
     history.push(`/profile/${myid}`)
-    axios.put('/editprofile', updateForm);
+    axios.put('https://desktop70app.herokuapp.com/editprofile', updateForm);
   }
   const ConverBase64 = (file) => {
     return new Promise ((resolve, reject) => {

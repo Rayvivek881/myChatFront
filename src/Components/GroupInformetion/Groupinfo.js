@@ -118,7 +118,7 @@ function Groupinfo(props) {
     const newuserData = userData;
     newuserData.groups.splice(newuserData.groups.indexOf(JSON.stringify([groupdata._id, groupdata.groupName])), 1);
     ChangeuserData(newuserData);
-    axios.get(`/quitgroup?groupid=${groupdata._id}&groupNmae=${groupdata.groupName}`, {})
+    axios.get(`https://desktop70app.herokuapp.com/quitgroup?groupid=${groupdata._id}&groupNmae=${groupdata.groupName}`, {})
     history.push('/');
   }
   const [open, setOpen] = React.useState(false);
@@ -126,7 +126,7 @@ function Groupinfo(props) {
     setOpen(true);
   };
   const addthis = (arr) => {
-    if (myid == JSON.parse(groupdata.Admin)[1]) {
+    if (myid === JSON.parse(groupdata.Admin)[1]) {
       const obj = {
         friendid: arr[0],
         name: arr[1],
@@ -134,9 +134,9 @@ function Groupinfo(props) {
         groupName: groupdata.groupName
       }
       console.log(obj);
-      axios.put('/addmember', obj);
+      axios.put('https://desktop70app.herokuapp.com/addmember', obj);
     } else {
-      axios.get(`/addgroupreq?friendid=${arr[0]}&name=${arr[1]}&groupid=${groupdata._id}&groupName=${groupdata.groupName}&Adminid=${groupdata.Admin}`)
+      axios.get(`https://desktop70app.herokuapp.com/addgroupreq?friendid=${arr[0]}&name=${arr[1]}&groupid=${groupdata._id}&groupName=${groupdata.groupName}&Adminid=${groupdata.Admin}`)
       alert('request sent');
     }
   }
@@ -163,12 +163,12 @@ function Groupinfo(props) {
   const editmyprofile = () => {
     changegroupdata({ ...groupdata, image: groupedit.image, status: groupedit.status, groupName: groupedit.groupName,});
     console.log(groupdata);
-    axios.post('/editgroup', groupedit);
+    axios.post('https://desktop70app.herokuapp.com/editgroup', groupedit);
     handleClose();
   }
   console.log(groupdata);
   const removethisfromFroup = (val, index) => {
-    axios.get(`/rmmember?groupid=${groupdata._id}&member=${val}`, {});
+    axios.get(`https://desktop70app.herokuapp.com/rmmember?groupid=${groupdata._id}&member=${val}`, {});
     console.log(index);
     var newgroupdata = groupdata;
     newgroupdata.members?.splice(index, 1);
@@ -178,7 +178,7 @@ function Groupinfo(props) {
   useEffect(async () => {
     if (id != '') {
       console.log('taking1......');
-      const result = await axios.get(`/groupquery/${id}`, {});
+      const result = await axios.get(`https://desktop70app.herokuapp.com/groupquery/${id}`, {});
       console.log('taking2......');
       console.log(result.data.result);
       changegroupdata({ ...result.data.result });
@@ -233,7 +233,7 @@ function Groupinfo(props) {
       name: JSON.parse(val)[1],
       groupName: groupdata.groupName
     }
-    axios.put('/addmember', obj);
+    axios.put('https://desktop70app.herokuapp.com/addmember', obj);
   }
 
   const requests = (
@@ -271,7 +271,7 @@ function Groupinfo(props) {
   );
   const [remove, setremove] = React.useState({ val: allmember });
   useEffect(() => {
-    if (age == 1) setremove({ val: requests });
+    if (age === 1) setremove({ val: requests });
     else setremove({ val: allmember });
   }, [age]);
   return (
@@ -287,7 +287,7 @@ function Groupinfo(props) {
                 justify="flex-start"
                 alignItems="flex-start"
                 sm={5}>
-                <img src={(groupdata.image == null) ? img1 : groupdata.image} alt='vivek kumaar ray' className={classes.image} />
+                <img src={(groupdata.image === null) ? img1 : groupdata.image} alt='vivek kumaar ray' className={classes.image} />
                 <Typography style={{ marginTop: '10px' }} >All your Friends</Typography>
                 <Grid item xs={12} className={classes.friendgrid}>
                   <List className={classes.root2}>

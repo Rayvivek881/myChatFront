@@ -112,7 +112,7 @@ export default function NewPost(props) {
       ...postdata,
       name: myname
     }
-    const result = await axios.post('/createpost', obj);
+    const result = await axios.post('https://desktop70app.herokuapp.com/createpost', obj);
     let obj1 = allPosts;
     obj1.unshift(result.data.newpost)
     let obj2 = userData;

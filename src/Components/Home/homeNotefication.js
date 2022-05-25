@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import { GlobalContext } from '../Context/GlobalStroge'
+import { IconButton, ListItemSecondaryAction } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,8 +24,8 @@ export default function Notefications() {
   return (
     <List className={classes.root}>
       {userData.notifications?.map((val, index) => (
-      <>
-      <ListItem alignItems="flex-start" key = {index} button >
+      <div key = {index}>
+      <ListItem alignItems="flex-start" button>
         <ListItemText
           secondary={
             <React.Fragment>
@@ -34,9 +35,14 @@ export default function Notefications() {
             </React.Fragment>
           }
         />
+        {/* <ListItemSecondaryAction>
+          <IconButton>
+            info
+          </IconButton>
+        </ListItemSecondaryAction> */}
       </ListItem>
       <Divider variant="inset" component="li" />
-      </>
+      </div>
       ))}
     </List>
   );

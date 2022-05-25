@@ -32,14 +32,14 @@ export default function Friendrequest() {
     let temp = userData;
     temp.friendrequest.splice(index, 1);
     ChangeuserData(temp);
-    await axios.put(`/friendacc?friendid=${id}&name=${name}`, {});
+    await axios.put(`https://desktop70app.herokuapp.com/friendacc?friendid=${id}&name=${name}`, {});
   }
   console.log('changing...........');
   const deleteFriendReq = async (id, index, name) => {
     let temp = userData;
     temp.friendrequest.splice(index, 1);
     ChangeuserData(temp);
-    await axios.delete(`/friendreq?friendid=${id}&name=${name}`, {});
+    await axios.delete(`https://desktop70app.herokuapp.com/friendreq?friendid=${id}&name=${name}`, {});
   }
 
   return (

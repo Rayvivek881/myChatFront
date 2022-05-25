@@ -85,7 +85,7 @@ export default function EditPosts(props) {
       ...newdata
     }
     ChangePosts(obj);
-    axios.patch('/editpost', {...newdata, postid: props.posteditdata._id});
+    axios.patch('https://desktop70app.herokuapp.com/editpost', {...newdata, postid: props.posteditdata._id});
   }
 
   console.log(props.posteditdata);

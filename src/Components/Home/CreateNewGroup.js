@@ -16,7 +16,7 @@ export default function CreateGroup(props) {
 
   const sendRequest = async () => {
       props.changenewGroup(false)
-      const result = await axios.get(`/creategroup?groupName=${groupName}`, {}) 
+      const result = await axios.get(`https://desktop70app.herokuapp.com/creategroup?groupName=${groupName}`, {})
       let obj = userData;
       obj.groups?.push(JSON.stringify(result.data.addit));
       ChangeuserData(obj);

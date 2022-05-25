@@ -92,12 +92,12 @@ function SignIn(props) {
       isemail: isemail,
       emailorusername: searchdata
     }
-    axios.patch('/forgetpass', obj);
+    axios.patch('https://desktop70app.herokuapp.com/forgetpass', obj);
     handleClose3();
   }
   const sendOtpTovarify = async () => {
     console.log('sending.......');
-    const result = await axios.post('/forgetpass', { emailorusername: searchdata });
+    const result = await axios.post('https://desktop70app.herokuapp.com/forgetpass', { emailorusername: searchdata });
     console.log('got sent.......');
     if (result.data.isVarified) {
       cfrotp(result.data.val);
@@ -230,7 +230,7 @@ function SignIn(props) {
   }
   const [snack, changesnack] = React.useState({ a: false, m: '', e: false })
   const handleSubmit = async () => {
-    const result = await axios.post('/login', loginForm);
+    const result = await axios.post('https://desktop70app.herokuapp.com/login', loginForm);
     console.log(result.data);
     if (result.data.isVarified) {
       console.log(result.data.data);

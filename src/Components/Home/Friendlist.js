@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
   inline: {
     display: 'inline',
   },
-  root1: {
-    flexGrow: 1
-  },
   typography: {
     padding: theme.spacing(2),
     overflow: 'hidden'
@@ -104,7 +101,7 @@ function Friendlst() {
     setAnchorEl(event.currentTarget);
     ChangemassagesName(name);
     Changemassageslocation(mid);
-    const result = await axios.post('/prevmessage', { mid: mid });
+    const result = await axios.post('https://desktop70app.herokuapp.com/prevmessage', { mid: mid });
     cmessageobj({...result.data.result});
     cmessagedata([...result.data.result.messages])
     changepid(tk);
@@ -123,7 +120,7 @@ function Friendlst() {
     }
     console.log(obj);
     cmessagedata([...messagedata, JSON.stringify([myid, sendthismessgge])])
-    await axios.patch('/massage', obj)
+    await axios.patch('https://desktop70app.herokuapp.com/massage', obj)
   }
 
   const open = Boolean(anchorEl);

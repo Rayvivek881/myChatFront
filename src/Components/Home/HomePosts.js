@@ -66,9 +66,9 @@ export default function AllPosts() {
   const likeThisPost = async (postid, flage, index, userid)=> {
     even(flage, index);
     if(!flage) {
-      await axios.put(`/like?postid=${postid}&userid=${userid}`, {});
+      await axios.put(`https://desktop70app.herokuapp.com/like?postid=${postid}&userid=${userid}`, {});
     } else {
-      await axios.put(`/rmlike?postid=${postid}`, {});
+      await axios.put(`https://desktop70app.herokuapp.com/rmlike?postid=${postid}`, {});
     }
   }
   return (
@@ -103,7 +103,7 @@ export default function AllPosts() {
           <CardActions disableSpacing>
             <IconButton aria-label="add to favorites" onClick = {() => 
               likeThisPost(val._id, (val.likes.indexOf(myid) != -1), index, val.userid)}>
-              <FavoriteIcon color = {(val.likes.indexOf(myid) != -1) ? 'secondary': 'primary'}/>
+              <FavoriteIcon color = {(val.likes.indexOf(myid) != -1) ? 'error': 'primary'}/>
             </IconButton>
             <IconButton aria-label="share">
               <ShareIcon />

@@ -8,7 +8,7 @@ import FormDialog from './OTP'
 import axios from 'axios';
 
 const initialstate = {
-  fullname: '', password: '', username: '', email: '', cpassword: '',image: ''
+  fullname: '', password: '', username: '', email: '', cpassword: '', image: ''
 }
 
 function Copyright() {
@@ -52,7 +52,7 @@ function SignUp(props) {
     const obj = { ...loginForm, image: "" }
     console.log('sumitting......');
     console.log(loginForm);
-    const result = await axios.post('/signup', obj);
+    const result = await axios.post('https://desktop70app.herokuapp.com/signup', obj);
     console.log(result.data);
     if (result.data.isVarified) {
       Changeval(result.data.val);

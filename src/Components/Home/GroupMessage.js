@@ -76,12 +76,12 @@ export default function GroupMessage(props) {
     console.log(obj);
     changeallmessage([...allmessage, JSON.stringify([props.isopenmessage.myid, props.isopenmessage.myname ,sendmessagedata])]);
     console.log(props.isopenmessage.myid);
-    await axios.post('/sendgm', obj)
+    await axios.post('https://desktop70app.herokuapp.com/sendgm', obj)
   }
   useEffect(async () => {
     setOpen(props.isopenmessage.open)
     if (props.isopenmessage.open == true) {
-      const result = await axios.post('/prevmessage', { mid: props.isopenmessage?.friendmessageid });
+      const result = await axios.post('https://desktop70app.herokuapp.com/prevmessage', { mid: props.isopenmessage?.friendmessageid });
       changeallmessage([...result.data.result.messages]);
     }
   }, [props.isopenmessage.open])

@@ -152,7 +152,7 @@ function Profile(props) {
     let newUserData = userData;
     newUserData.posts.splice(newUserData.posts.indexOf(posteditdata._id), 1);
     ChangeBoth(newposts, newUserData);
-    axios.patch(`/mypost?postid=${posteditdata._id}`, {});
+    axios.patch(`https://desktop70app.herokuapp.com/mypost?postid=${posteditdata._id}`, {});
   }
 
   const handleClose = () => {
@@ -209,9 +209,9 @@ function Profile(props) {
   const likeThisPost = async (postid, flage, index) => {
     even(flage, index);
     if (!flage) {
-      await axios.put(`/like?postid=${postid}`, {});
+      await axios.put(`https://desktop70app.herokuapp.com/like?postid=${postid}`, {});
     } else {
-      await axios.put(`/rmlike?postid=${postid}`, {});
+      await axios.put(`https://desktop70app.herokuapp.com/rmlike?postid=${postid}`, {});
     }
   }
 
@@ -221,7 +221,7 @@ function Profile(props) {
       return;
     }
     changesnack({a: true, m: 'your friend has been sent', e: true});
-    axios.put(`/friendreq?friendid=${id}`, {});
+    axios.put(`https://desktop70app.herokuapp.com/friendreq?friendid=${id}`, {});
   }
 
   const gotomyfriendprofile = (id) => {
@@ -233,7 +233,7 @@ function Profile(props) {
     if (profileid != '') {
       if (profileid == myid) changemydata({ ...userData })
        else {
-        const result = await axios.get(`/mypost/${profileid}`, {});
+        const result = await axios.get(`https://desktop70app.herokuapp.com/mypost/${profileid}`, {});
         changemydata({ ...result.data.mydata });
       }
     }

@@ -88,12 +88,12 @@ export default function ProfileMSG(props) {
     console.log(obj);
     changeallmessage([...allmessage, JSON.stringify([props.isopenmessage.myid, sendmessagedata])]);
     console.log(props.isopenmessage.myid);
-    await axios.patch('/massage', obj)
+    await axios.patch('https://desktop70app.herokuapp.com/massage', obj)
   }
   useEffect(async () => {
     setOpen(props.isopenmessage.open)
     if (props.isopenmessage.open == true) {
-      const result = await axios.post('/prevmessage', { mid: props.isopenmessage?.friendmessageid });
+      const result = await axios.post('https://desktop70app.herokuapp.com/prevmessage', { mid: props.isopenmessage?.friendmessageid });
       changemessagedata({ ...result.data.result })
       changeallmessage([...result.data.result.messages])
       console.log(messagedata);

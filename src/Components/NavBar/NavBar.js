@@ -119,22 +119,26 @@ function NavBar(props) {
   const handleSearchMenuOpen = async (event) => {
     if (event.keyCode == 13) {
       setopenMenu(event.currentTarget);
-      const result = await axios.post('/search', { search: event.target.value });
+      const result = await axios.post('https://desktop70app.herokuapp.com/search', { search: event.target.value });
       Changesearchdata({matches: result.data.matches, group: result.data.group});
       console.log(searchdata);
     }
   };
 
-  const sendtoProfile = () =>  history.push(`/profile/${userData?._id}`);
+  const sendtoProfile = () =>  {
+    if (userData?._id == undefined) {
+      changesnack({a: true, m: 'please login first', e: false})
+    } else history.push(`/profile/${userData?._id}`);
+  }
 
   const sendFriendRequest = (e, id ) => {
     changesnack({a: true, m: 'your friend request has sent', e: true})
-    axios.put(`/friendreq?friendid=${id}`, {});
+    axios.put(`https://desktop70app.herokuapp.com/friendreq?friendid=${id}`, {});
   }
 
-  const sendjoinrequest = (id) => {
+  const sendjoinrequest = (e, id) => {
     changesnack({a: true, m: 'your group join request has sent', e: true});
-    axios.get(`/groupreq?groupid=${id}`, {});
+    axios.get(`https://desktop70app.herokuapp.com/groupreq?groupid=${id}`, {});
   }
 
   const ChangeleftMenu = (e, val) => {
@@ -289,7 +293,7 @@ function NavBar(props) {
   const changeUser = () => {
     if (userData?.fullname == undefined) props.history.push('/Login'); 
     else {
-      axios.get('/logout', {});
+      axios.get('https://desktop70app.herokuapp.com/logout', {});
       ChangeuserData({});
     }
   }

@@ -20,7 +20,7 @@ function FormDialog(props) {
   const onVarify = () => {
     setOpen(false);
     if (props.val == InputOTP) {
-      axios.patch('/signup', props.loginForm);
+      axios.patch('https://desktop70app.herokuapp.com/signup', props.loginForm);
       history.push('/login');
     } else {
       alert('otp do not match');

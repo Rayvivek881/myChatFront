@@ -15,8 +15,8 @@ export const GlobalProvider = ({ children }) => {
     const [state, setstate] = useState(initialState);
     let [progressbar, Changeprogressbar] = useState({a: true, b: false});
     const getdata = async () => {
-        const result1 = await axios.post('/allposts', {});
-        const result = await axios.post('/home', {});
+        const result1 = await axios.post('https://desktop70app.herokuapp.com/allposts', {});
+        const result = await axios.post('https://desktop70app.herokuapp.com/home', {});
         Changeprogressbar({a: false, b: true});
         setstate({ ...state, userData: { ...result.data.data?._doc }, allPosts: [...result1.data.allposts] });
     }
@@ -57,8 +57,8 @@ export const GlobalProvider = ({ children }) => {
             <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }} 
                 onClose = {() => {Changeprogressbar({a: false, b: false})}}
                 open={progressbar.b} autoHideDuration={4000}>
-                <Alert severity={(state.userData.fullname == undefined) ? 'error' : 'success'}>
-                    {(state.userData.fullname == undefined) ? 'Please login to use all features': 'you have successfully logged In'}
+                <Alert severity={(state.userData.fullname === undefined) ? 'error' : 'success'}>
+                    {(state.userData.fullname === undefined) ? 'Please login to use all features': 'you have successfully logged In'}
                 </Alert>
             </Snackbar>
         </GlobalContext.Provider>

@@ -12,7 +12,7 @@ import EditProfile from './Components/Profile/EditYourProfile'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App"> 
       <GlobalProvider>
         <Router>
           <NavBar/>
@@ -25,9 +25,8 @@ function App() {
           <Route exact path="/editprofile/:id" component = {EditProfile} />
           </Switch>
         </Router>
-      </GlobalProvider>
+      </GlobalProvider> 
     </div>
   );
 }
-
 export default App;
